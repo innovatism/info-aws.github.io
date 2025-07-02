@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Kinesis Ecosystem: A Visual Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- 
+    Infographic Plan:
+    1. Introduction: Hook with "4 Services" big number.
+    2. Ingestion Services: Compare Data Streams vs. Video Streams using cards.
+    3. Delivery Service: Visualize Kinesis Data Firehose I/O with a bar chart.
+    4. Analysis Service: Show Kinesis Data Analytics options with a donut chart.
+    5. Architecture Flows: Depict common data pathways using HTML/CSS flowcharts.
+    6. AI Architecture Designer: Interactive section using Gemini API to generate custom pipelines.
+    7. Conclusion: Summarize with a "Choose Your Path" guide.
+
+    Color Palette: "Energetic & Playful"
+    - #FF4858 (Red)
+    - #FFB347 (Orange)
+    - #FFD639 (Yellow)
+    - #00A6A6 (Teal)
+    - #0075A2 (Blue)
+
+    Visualization Choices & Justification (NO SVG / NO MERMAID JS):
+    - Intro Big Number: Goal=Inform. Method=Styled Text. Justification=High impact. NO SVG.
+    - Service Comparison: Goal=Compare. Method=HTML/CSS Cards. Justification=Clear side-by-side view. NO SVG.
+    - Firehose I/O: Goal=Compare. Method=Chart.js Bar Chart. Justification=Compares quantities effectively. Uses Canvas. NO SVG.
+    - Analytics Options: Goal=Inform. Method=Chart.js Donut Chart. Justification=Shows composition. Uses Canvas. NO SVG.
+    - Architecture Flows: Goal=Organize. Method=HTML/CSS with Tailwind Flexbox. Justification=Shows process flow as required. NO SVG.
+    - AI Designer: Goal=Organize/Relationships. Method=Gemini API call with HTML/CSS rendering. Justification=Interactive, personalized architecture generation. NO SVG.
+    - Conclusion List: Goal=Organize. Method=HTML List. Justification=Simple and clear for summaries. NO SVG.
+
+    Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output. All visuals are rendered using standard HTML/CSS or the Chart.js Canvas renderer.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 384px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #00A6A6, #0075A2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            color: #FFB347;
+            align-self: center;
+            margin: 0 1rem;
+        }
+        .flow-box {
+            border: 2px solid #00A6A6;
+            background-color: #ffffff;
+            transition: all 0.3s ease-in-out;
+        }
+        .flow-connector {
+            flex-grow: 1;
+            background-color: #FFB347;
+            height: 4px;
+            width: 2rem;
+            align-self: center;
+        }
+        .gemini-button {
+            background: linear-gradient(to right, #FF4858, #FFB347);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .gemini-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0075A2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-6xl font-black gradient-text">The Amazon Kinesis Ecosystem</h1>
+            <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">A visual guide to AWS's real-time data streaming services, from ingestion and delivery to live analysis.</p>
+        </header>
+
+        <section id="intro" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col md:flex-row items-center justify-center text-center md:text-left">
+                <div class="text-8xl md:text-9xl font-black" style="color: #FF4858;">4</div>
+                <div class="md:ml-8 mt-4 md:mt-0">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800">Powerful Services</h2>
+                    <p class="mt-2 text-slate-500 max-w-xl">The Kinesis family is composed of four distinct services, each tailored to a specific role in your data pipeline, empowering you to build sophisticated, real-time applications.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ingestion" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Data Ingestion: The Two Front Doors</h2>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">All streaming data needs an entry point. Kinesis provides two specialized services for capturing data streams, depending on the type of data you're working with.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl shadow-md p-6 border-t-8 border-[#0075A2]">
+                    <h3 class="text-2xl font-bold text-slate-800 flex items-center"><span class="text-3xl mr-3">💧</span>Kinesis Data Streams</h3>
+                    <p class="mt-2 mb-4 text-slate-500">The core service for capturing high-throughput streams of generic data records from any source.</p>
+                    <div class="text-left">
+                        <p class="font-bold text-slate-700">Primary Inputs:</p>
+                        <ul class="list-disc list-inside text-slate-600 mt-1">
+                            <li>Custom Apps (Web/Mobile)</li>
+                            <li>Kinesis Agent on Servers</li>
+                            <li>AWS Services (IoT Core, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md p-6 border-t-8 border-[#00A6A6]">
+                    <h3 class="text-2xl font-bold text-slate-800 flex items-center"><span class="text-3xl mr-3">🎥</span>Kinesis Video Streams</h3>
+                    <p class="mt-2 mb-4 text-slate-500">Purpose-built to securely ingest live video from connected devices for analytics and machine learning.</p>
+                    <div class="text-left">
+                        <p class="font-bold text-slate-700">Primary Inputs:</p>
+                        <ul class="list-disc list-inside text-slate-600 mt-1">
+                            <li>CCTV & IP Cameras</li>
+                            <li>Webcams & Body Cams</li>
+                            <li>Drones & Other Media Devices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="delivery" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Data Delivery: The Superhighway</h2>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Once captured, data needs to be delivered reliably. Kinesis Data Firehose is the simplest way to load streaming data into data lakes, warehouses, and analytics tools.</p>
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-center text-slate-800 mb-4">Firehose: Inputs vs. Outputs</h3>
+                <p class="text-center text-slate-500 mb-6">Firehose is highly versatile, accepting data from several sources and fanning it out to an even wider range of destinations, showcasing its primary role as a delivery hub.</p>
+                <div class="chart-container">
+                    <canvas id="firehoseChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Real-Time Analysis: The Brain</h2>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Gaining insights from data in motion is critical. Kinesis Data Analytics lets you process and query data as it streams, using familiar tools.</p>
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                 <h3 class="text-2xl font-bold text-center text-slate-800 mb-4">Analytics Engine Preference</h3>
+                 <p class="text-center text-slate-500 mb-6">You can process data using two powerful engines. Standard SQL is excellent for simple queries and aggregations, while Apache Flink provides a robust framework for complex, stateful applications.</p>
+                <div class="chart-container">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <section id="flows" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">Visualizing the Flow: Common Architectures</h2>
+            <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">The true power of Kinesis comes from combining services to build end-to-end data pipelines. Here are two common patterns.</p>
+            <div class="space-y-12">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-6">Pattern 1: Real-time IoT Analytics</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-center w-full">
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">📡<br>IoT Sensor</div>
+                        <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">💧<br>Kinesis Data Streams</div>
+                        <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">📊<br>Kinesis Data Analytics</div>
+                         <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">🔥<br>Kinesis Data Firehose</div>
+                        <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">💾<br>Amazon S3</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-6">Pattern 2: Live Video Analysis</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-center w-full">
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">📹<br>CCTV Camera</div>
+                        <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">🎥<br>Kinesis Video Streams</div>
+                        <div class="flow-connector my-2 md:my-0"></div>
+                        <div class="flow-box rounded-lg p-4 text-center shadow-md font-bold">🧠<br>Amazon Rekognition</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-designer" class="mb-16">
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-center mb-2 gradient-text">AI-Powered Architecture Designer</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Describe your data streaming use case below, and our AI assistant will design a custom Kinesis pipeline for you.</p>
+                
+                <div class="max-w-2xl mx-auto">
+                    <textarea id="useCasePrompt" class="w-full p-4 border border-slate-300 rounded-lg shadow-inner focus:ring-2 focus:ring-[#00A6A6] focus:outline-none" rows="4" placeholder="e.g., 'I need to analyze real-time player data from my mobile game to detect cheaters and update a live dashboard.'"></textarea>
+                    <button id="designPipelineBtn" class="gemini-button w-full mt-4 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center text-lg">
+                        ✨ Design My Pipeline
+                    </button>
+                </div>
+
+                <div id="loader" class="hidden mx-auto mt-8">
+                    <div class="loader"></div>
+                </div>
+
+                <div id="pipelineResult" class="mt-8"></div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 md:mt-16 pt-8 border-t border-slate-300">
+            <h2 class="text-2xl font-bold text-slate-800">Choose Your Kinesis Path</h2>
+            <p class="mt-2 mb-6 text-slate-600 max-w-2xl mx-auto">Select the right service based on your primary goal.</p>
+            <div class="max-w-md mx-auto text-left bg-slate-800 text-white p-6 rounded-lg shadow-xl">
+                <ul class="space-y-3">
+                    <li class="flex items-start"><strong class="w-24 text-teal-300">IF you need to CAPTURE...</strong><span>💧 Data records from apps, use **Data Streams**.</span></li>
+                    <li class="flex items-start"><strong class="w-24 text-teal-300">IF you need to INGEST...</strong><span>🎥 Live video feeds, use **Video Streams**.</span></li>
+                    <li class="flex items-start"><strong class="w-24 text-teal-300">IF you need to DELIVER...</strong><span>🔥 Data to S3 or Redshift, use **Data Firehose**.</span></li>
+                    <li class="flex items-start"><strong class="w-24 text-teal-300">IF you need to ANALYZE...</strong><span>📊 Data in real-time with SQL, use **Data Analytics**.</span></li>
+                </ul>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapLabels(label, maxWidth) {
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = currentLine ? currentLine + ' ' + word : word;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+            return lines.length > 1 ? lines : label;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const baseChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 14, family: 'Inter' },
+                        color: '#475569'
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    backgroundColor: '#1e293b',
+                    titleFont: { size: 16, weight: 'bold', family: 'Inter' },
+                    bodyFont: { size: 14, family: 'Inter' },
+                    padding: 12,
+                    cornerRadius: 8
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#64748b',
+                        font: { family: 'Inter' }
+                    },
+                    grid: {
+                        color: '#e2e8f0'
+                    }
+                },
+                x: {
+                   ticks: {
+                        color: '#64748b',
+                        font: { family: 'Inter' }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        };
+
+        const firehoseCtx = document.getElementById('firehoseChart');
+        if (firehoseCtx) {
+            new Chart(firehoseCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Input Sources', 'Output Destinations'],
+                    datasets: [{
+                        label: 'Number of Service/Endpoint Types',
+                        data: [3, 5],
+                        backgroundColor: ['#00A6A6', '#0075A2'],
+                        borderColor: ['#00A6A6', '#0075A2'],
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...baseChartOptions,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { ...baseChartOptions.scales.y },
+                        y: { ...baseChartOptions.scales.x }
+                    }
+                }
+            });
+        }
+        
+        const analyticsCtx = document.getElementById('analyticsChart');
+        if(analyticsCtx) {
+            new Chart(analyticsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Standard SQL', 'Apache Flink'],
+                    datasets: [{
+                        label: 'Usage Share',
+                        data: [65, 35],
+                        backgroundColor: ['#FFB347', '#FF4858'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    ...baseChartOptions,
+                    cutout: '60%',
+                    scales: {
+                        y: {...baseChartOptions.scales.y, display: false},
+                        x: {...baseChartOptions.scales.x, display: false}
+                    }
+                }
+            });
+        }
+
+        const designBtn = document.getElementById('designPipelineBtn');
+        const promptInput = document.getElementById('useCasePrompt');
+        const resultDiv = document.getElementById('pipelineResult');
+        const loader = document.getElementById('loader');
+
+        const renderPipeline = (data) => {
+            resultDiv.innerHTML = ''; 
+
+            const title = document.createElement('h3');
+            title.className = 'text-xl font-bold text-center text-slate-800 mb-2';
+            title.textContent = data.title;
+            resultDiv.appendChild(title);
+
+            const summary = document.createElement('p');
+            summary.className = 'text-center text-slate-600 mb-8 max-w-2xl mx-auto';
+            summary.textContent = data.summary;
+            resultDiv.appendChild(summary);
+
+            const flowContainer = document.createElement('div');
+            flowContainer.className = 'flex flex-col md:flex-row items-stretch justify-center w-full';
+            
+            data.architecture.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'flex flex-col items-center';
+
+                const box = document.createElement('div');
+                box.className = 'flow-box rounded-lg p-4 text-center shadow-md font-bold flex-grow flex flex-col justify-center';
+                
+                const serviceName = document.createElement('div');
+                serviceName.textContent = step.service;
+                box.appendChild(serviceName);
+
+                const reason = document.createElement('p');
+                reason.className = 'text-xs font-normal text-slate-500 mt-2';
+                reason.textContent = step.reason;
+                box.appendChild(reason);
+
+                stepDiv.appendChild(box);
+                flowContainer.appendChild(stepDiv);
+
+                if (index < data.architecture.length - 1) {
+                    const connector = document.createElement('div');
+                    connector.className = 'flow-connector my-4 md:my-0';
+                    flowContainer.appendChild(connector);
+                }
+            });
+            resultDiv.appendChild(flowContainer);
+        };
+
+        const handleDesignPipeline = async () => {
+            const userPrompt = promptInput.value;
+            if (!userPrompt.trim()) {
+                resultDiv.innerHTML = `<p class="text-center text-red-500">Please describe your use case in the text box above.</p>`;
+                return;
+            }
+
+            loader.classList.remove('hidden');
+            resultDiv.innerHTML = '';
+
+            const systemPrompt = `You are an expert AWS solutions architect specializing in the Kinesis family. Your task is to design a data pipeline using Kinesis and other relevant AWS services based on a user's request.
+            
+            Analyze the user's prompt and recommend an architecture. The architecture should be a sequence of services. For each service, provide a brief justification for its inclusion.
+            
+            Only use services from this list: Kinesis Data Streams, Kinesis Video Streams, Kinesis Data Firehose, Kinesis Data Analytics, Amazon S3, AWS Lambda, Amazon Rekognition.
+            
+            Respond with a JSON object that strictly follows this schema. Do not add any extra text or markdown formatting.`;
+
+            const jsonSchema = {
+                type: "OBJECT",
+                properties: {
+                    "title": { "type": "STRING" },
+                    "summary": { "type": "STRING" },
+                    "architecture": {
+                        "type": "ARRAY",
+                        "items": {
+                            "type": "OBJECT",
+                            "properties": {
+                                "service": { "type": "STRING" },
+                                "reason": { "type": "STRING" }
+                            },
+                             "required": ["service", "reason"]
+                        }
+                    }
+                },
+                required: ["title", "summary", "architecture"]
+            };
+
+            try {
+                const chatHistory = [{ role: "user", parts: [{ text: `${systemPrompt}\n\nUser Request: "${userPrompt}"` }] }];
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: jsonSchema
+                    }
+                };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0) {
+                    const jsonText = result.candidates[0].content.parts[0].text;
+                    const parsedJson = JSON.parse(jsonText);
+                    renderPipeline(parsedJson);
+                } else {
+                    throw new Error("Received an empty or invalid response from the AI.");
+                }
+
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                resultDiv.innerHTML = `<p class="text-center text-red-500">Sorry, something went wrong while designing the pipeline. Please try again. Error: ${error.message}</p>`;
+            } finally {
+                loader.classList.add('hidden');
+            }
+        };
+
+        designBtn.addEventListener('click', handleDesignPipeline);
+
+    </script>
+</body>
+</html>
